@@ -58,6 +58,12 @@ docker-compose up
     - Connect to voice channels
     - Speak in voice channels
 
+## Commands
+- **!play (name or URL):** Plays a song. Can be a name or a YouTube URL.
+- **!playlist (URL):** Plays all songs in a YouTube playlist.
+- **!stop:** Stops the current song and disconnects the bot from the voice channel.
+- **!info:** Displays a list of available commands and how to use them.
+
 
 
 </div>
