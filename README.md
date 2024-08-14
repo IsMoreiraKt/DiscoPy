@@ -64,6 +64,7 @@ docker-compose up
 - **!stop:** Stops the current song and disconnects the bot from the voice channel.
 - **!info:** Displays a list of available commands and how to use them.
 
-
+## License
+This project is licensed under the GNU General Public License v3.0 (GPL-3.0). See the [LICENSE](./LICENSE) file for details.
 
 </div>
