@@ -15,3 +15,13 @@ intents.presences = True
 
 bot = commands.Bot(command_prefix='!', intents=intents)
 bot.load_extension('cogs.music')
+
+
+
+@bot.event
+async def on_ready():
+    print(f'Logged in as {bot.user.name}')
+
+
+
+bot.run(TOKEN)
