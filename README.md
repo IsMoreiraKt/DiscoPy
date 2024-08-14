@@ -48,3 +48,16 @@ docker compose build
 ```bash
 docker-compose up
 ```
+
+## Configuration
+1. Add the Bot to Your Server:
+    - Go to the [Discord Developer Portal](https://discord.com/developers/docs/intro).
+    - Generate an invite URL with permissions to connect and speak in voice channels.
+    - Add the bot to your Discord server.
+2. Required Permissions:
+    - Connect to voice channels
+    - Speak in voice channels
+
+
+
+</div>
