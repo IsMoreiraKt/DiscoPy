@@ -83,3 +83,13 @@ class Music(commands.Cog):
             
             while voice_client.is_playing():
                 await asyncio.sleep(1)
+
+
+    @commands.command()
+    async def stop(self, ctx):
+        if ctx.voice_client is None:
+            await ctx.send("I am not in a voice channel.")
+            return
+
+        await ctx.voice_client.disconnect()
+        await ctx.send("Stopped and disconnected.")
