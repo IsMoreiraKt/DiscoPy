@@ -25,3 +25,26 @@ DiscoPy is a Discord music bot built with Python and the discord.py library. It 
 - **[Docker Compose](https://docs.docker.com/compose/install/linux/)**
 - **[Python3](https://www.python.org/downloads/):** 3.11.2
 
+## Local Installation
+1. **Clone the Repository:**
+```bash
+https://github.com/Ismael-Moreira-Kt/DiscoPy
+cd DiscoPy
+```
+
+2. **Create a .env file:**
+```env
+DISCORD_TOKEN=your_discord_bot_token
+```
+
+You can get a token [here](https://discord.com/developers/docs/intro).
+
+3. **Build the Docker Image:**
+```bash
+docker compose build
+```
+
+4. **Start the Bot with Docker Compose:**
+```bash
+docker-compose up
+```
