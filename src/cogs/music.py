@@ -104,5 +104,9 @@ class Music(commands.Cog):
             "`!stop`: Stop the current song and disconnect from the voice channel.\n"
             "`!info`: Show information about how to use the bot.\n"
         )
-        
+
         await ctx.send(info_message)
+
+
+def setup(bot):
+    bot.add_cog(Music(bot))
