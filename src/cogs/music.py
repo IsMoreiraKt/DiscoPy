@@ -93,3 +93,16 @@ class Music(commands.Cog):
 
         await ctx.voice_client.disconnect()
         await ctx.send("Stopped and disconnected.")
+
+
+    @commands.command()
+    async def info(self, ctx):
+        info_message = (
+            "**Music Bot Commands**\n"
+            "`!play <name or URL>`: Play a single song from YouTube. If a name is provided, it will search for the song. If a URL is provided, it will play the song directly.\n"
+            "`!playlist <playlist URL>`: Play all songs in a YouTube playlist.\n"
+            "`!stop`: Stop the current song and disconnect from the voice channel.\n"
+            "`!info`: Show information about how to use the bot.\n"
+        )
+        
+        await ctx.send(info_message)
