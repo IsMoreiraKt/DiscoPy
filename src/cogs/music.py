@@ -10,3 +10,9 @@ ytdl_opts = {
     'format': 'bestaudio/best',
     'noplaylist': True,
 }
+
+
+
+class Music(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
