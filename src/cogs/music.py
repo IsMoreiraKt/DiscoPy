@@ -48,3 +48,19 @@ class Music(commands.Cog):
         voice_client.play(discord.FFmpegPCMAudio(url2, **ffmpeg_opts))
 
         await ctx.send(f"Now playing: {info['title']}")
+
+
+    @commands.command()
+    async def playlist(self, ctx, *, url: str):
+        if ctx.author.voice is None:
+            await ctx.send("You need to be in a voice channel to use this command.")
+            return
+
+        channel = ctx.author.voice.channel
+        voice_client = await channel.connect()
+
+        if 'playlist' in url:
+            urls = get_playlist(url)
+            await self.play_playlist(ctx, voice_client, urls)
+        else:
+            await ctx.send("The provided URL is not a valid playlist.")
