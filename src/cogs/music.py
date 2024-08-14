@@ -64,3 +64,22 @@ class Music(commands.Cog):
             await self.play_playlist(ctx, voice_client, urls)
         else:
             await ctx.send("The provided URL is not a valid playlist.")
+
+    async def play_playlist(self, ctx, voice_client, urls):
+        for url in urls:
+            ytdl = youtube_dl.YoutubeDL(ytdl_opts)
+            info = ytdl.extract_info(url, download=False)
+            url2 = info['formats'][0]['url']
+
+            ffmpeg_opts = {
+                'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5',
+                'options': '-vn',
+            }
+
+            voice_client.stop()
+            voice_client.play(discord.FFmpegPCMAudio(url2, **ffmpeg_opts))
+
+            await ctx.send(f"Now playing: {info['title']}")
+            
+            while voice_client.is_playing():
+                await asyncio.sleep(1)
