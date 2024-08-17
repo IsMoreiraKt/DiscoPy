@@ -218,6 +218,23 @@ async def volume(ctx, vol: int):
 
 
 @bot.command()
+async def queue(ctx):
+    global queue
+    if len(queue) > 0:
+        queue_list = "\n".join(queue)
+        await ctx.send(f"**Queue:**\n{queue_list}")
+    else:
+        await ctx.send("The queue is currently empty.")
+
+@bot.command()
+async def clear(ctx):
+    global queue
+    queue = []
+    await ctx.send("Queue cleared.")
+
+
+
+@bot.command()
 async def nowplaying(ctx):
     global current_song
 
