@@ -58,15 +58,28 @@ docker-compose up
     - Go to the [Discord Developer Portal](https://discord.com/developers/docs/intro).
     - Generate an invite URL with permissions to connect and speak in voice channels.
     - Add the bot to your Discord server.
-2. Required Permissions:
-    - Connect to voice channels
-    - Speak in voice channels
+2. Required permissions:
+    - **Text permissions:**
+        - Send Messages
+        - Read Messages
+        - Send Messages from Embeds
+        - Attach Files
+        - Add Reactions
+
+    - **Voice permissions:**
+        - Connecting to Voice Channels
+        - Speaking on Voice Channels
 
 ## Commands
-- **!play (name or URL):** Plays a song. Can be a name or a YouTube URL.
-- **!playlist (URL):** Plays all songs in a YouTube playlist.
-- **!stop:** Stops the current song and disconnects the bot from the voice channel.
-- **!info:** Displays a list of available commands and how to use them.
+- **!play (nome ou URL):** Toca uma música. Pode ser um nome ou uma URL do YouTube.
+- **!playlist (URL):** Toca todas as músicas de uma playlist do YouTube.
+- **!stop:** Para a música atual e desconecta o bot do canal de voz.
+- **!info:** Exibe uma lista de comandos disponíveis e como usá-los.
+- **!volume (número):** Ajusta o volume da música em reprodução. O valor deve estar entre 0 e 100.
+- **!pause:** Pausa a música atual.
+- **!resume:** Retoma a reprodução da música pausada.
+- **!skip:** Pula a música atual e passa para a próxima na lista de reprodução.
+- **!current:** Mostra o nome da música que está tocando atualmente.
 
 ## License
 This project is licensed under the GNU General Public License v3.0 (GPL-3.0). See the [LICENSE](./LICENSE) file for details.
