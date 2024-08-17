@@ -13,6 +13,7 @@ VOICE_CHANNEL_ID = int(os.getenv('VOICE_CHANNEL_ID'))
 TEXT_CHANNEL_ID = int(os.getenv('TEXT_CHANNEL_ID'))
 
 
+
 intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
@@ -21,7 +22,7 @@ intents.presences = True
 
 
 bot = commands.Bot(command_prefix='!', intents=intents)
-queue = []
+song_queue = []
 is_playing = False
 current_song = None
 
@@ -76,9 +77,9 @@ async def on_ready():
 
 async def play_next(ctx, voice_client):
     global is_playing, current_song
-    if len(queue) > 0:
+    if len(song_queue) > 0:
         is_playing = True
-        current_song = queue.pop(0)
+        current_song = song_queue.pop(0)
         await play_url(ctx, voice_client, current_song)
     else:
         is_playing = False
@@ -88,7 +89,7 @@ async def play_next(ctx, voice_client):
 
 @bot.command()
 async def play(ctx, *, query: str):
-    global queue, is_playing
+    global song_queue, is_playing
 
     if ctx.author.voice is None:
         await ctx.send("You need to be in a voice channel to use this command.")
@@ -105,11 +106,11 @@ async def play(ctx, *, query: str):
     else:
         url = search_youtube(query)
 
-    queue.append(url)
-    await ctx.send(f"Added to queue: {url}")
+    song_queue.append(url)
 
     if not is_playing:
         await play_next(ctx, voice_client)
+
 
 
 async def play_url(ctx, voice_client, url):
@@ -147,6 +148,7 @@ async def playlist(ctx, *, url: str):
         await play_playlist(ctx, voice_client, urls)
     else:
         await ctx.send("The provided URL is not a valid playlist.")
+
 
 
 async def play_playlist(ctx, voice_client, urls):
@@ -219,17 +221,19 @@ async def volume(ctx, vol: int):
 
 @bot.command()
 async def queue(ctx):
-    global queue
-    if len(queue) > 0:
-        queue_list = "\n".join(queue)
+    global song_queue
+    if len(song_queue) > 0:
+        queue_list = "\n".join(song_queue)
         await ctx.send(f"**Queue:**\n{queue_list}")
     else:
         await ctx.send("The queue is currently empty.")
 
+
+
 @bot.command()
 async def clear(ctx):
-    global queue
-    queue = []
+    global song_queue
+    song_queue = []
     await ctx.send("Queue cleared.")
 
 
