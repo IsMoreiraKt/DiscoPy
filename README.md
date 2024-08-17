@@ -28,7 +28,7 @@ DiscoPy is a Discord music bot built with Python and the discord.py library. It 
 ## Local Installation
 1. **Clone the Repository:**
 ```bash
-https://github.com/Ismael-Moreira-Kt/DiscoPy
+git clone https://github.com/Ismael-Moreira-Kt/DiscoPy
 cd DiscoPy
 ```
 
