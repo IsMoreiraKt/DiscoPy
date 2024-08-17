@@ -13,6 +13,7 @@ VOICE_CHANNEL_ID = int(os.getenv('VOICE_CHANNEL_ID'))
 TEXT_CHANNEL_ID = int(os.getenv('TEXT_CHANNEL_ID'))
 
 
+
 intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
@@ -21,6 +22,9 @@ intents.presences = True
 
 
 bot = commands.Bot(command_prefix='!', intents=intents)
+song_queue = []
+is_playing = False
+current_song = None
 
 
 
@@ -71,8 +75,22 @@ async def on_ready():
 
 
 
+async def play_next(ctx, voice_client):
+    global is_playing, current_song
+    if len(song_queue) > 0:
+        is_playing = True
+        current_song = song_queue.pop(0)
+        await play_url(ctx, voice_client, current_song)
+    else:
+        is_playing = False
+        current_song = None
+
+
+
 @bot.command()
 async def play(ctx, *, query: str):
+    global song_queue, is_playing
+
     if ctx.author.voice is None:
         await ctx.send("You need to be in a voice channel to use this command.")
         return
@@ -85,13 +103,18 @@ async def play(ctx, *, query: str):
 
     if 'http' in query:
         url = query
-        await play_url(ctx, voice_client, url)
     else:
         url = search_youtube(query)
-        await play_url(ctx, voice_client, url)
+
+    song_queue.append(url)
+
+    if not is_playing:
+        await play_next(ctx, voice_client)
+
 
 
 async def play_url(ctx, voice_client, url):
+    global current_song
     ytdl = youtube_dl.YoutubeDL(ytdl_opts)
     info = ytdl.extract_info(url, download=False)
     url2 = info['formats'][0]['url']
@@ -102,7 +125,7 @@ async def play_url(ctx, voice_client, url):
     }
 
     voice_client.stop()
-    voice_client.play(discord.FFmpegPCMAudio(url2, **ffmpeg_opts))
+    voice_client.play(discord.FFmpegPCMAudio(url2, **ffmpeg_opts), after=lambda e: asyncio.run_coroutine_threadsafe(play_next(ctx, voice_client), bot.loop))
 
     await ctx.send(f"Now playing: {info['title']}")
 
@@ -125,6 +148,7 @@ async def playlist(ctx, *, url: str):
         await play_playlist(ctx, voice_client, urls)
     else:
         await ctx.send("The provided URL is not a valid playlist.")
+
 
 
 async def play_playlist(ctx, voice_client, urls):
@@ -160,13 +184,99 @@ async def stop(ctx):
 
 
 @bot.command()
+async def pause(ctx):
+    if ctx.voice_client.is_playing():
+        ctx.voice_client.pause()
+        await ctx.send("Music paused.")
+    else:
+        await ctx.send("No music is currently playing.")
+
+
+
+@bot.command()
+async def resume(ctx):
+    if ctx.voice_client.is_paused():
+        ctx.voice_client.resume()
+        await ctx.send("Music resumed.")
+    else:
+        await ctx.send("Music is not paused.")
+
+
+
+@bot.command()
+async def volume(ctx, vol: int):
+    if ctx.voice_client is None:
+        await ctx.send("I'm not connected to a voice channel.")
+        return
+
+    if vol < 0 or vol > 100:
+        await ctx.send("Please provide a volume between 0 and 100.")
+        return
+
+    ctx.voice_client.source = discord.PCMVolumeTransformer(ctx.voice_client.source)
+    ctx.voice_client.source.volume = vol / 100
+    await ctx.send(f"Volume set to {vol}%")
+
+
+
+@bot.command()
+async def queue(ctx):
+    global song_queue
+    if len(song_queue) > 0:
+        queue_list = "\n".join(song_queue)
+        await ctx.send(f"**Queue:**\n{queue_list}")
+    else:
+        await ctx.send("The queue is currently empty.")
+
+
+
+@bot.command()
+async def clear(ctx):
+    global song_queue
+    song_queue = []
+    await ctx.send("Queue cleared.")
+
+
+
+@bot.command()
+async def nowplaying(ctx):
+    global current_song
+
+    if current_song:
+        ytdl = youtube_dl.YoutubeDL(ytdl_opts)
+        info = ytdl.extract_info(current_song, download=False)
+        await ctx.send(f"Now playing: {info['title']}")
+    else:
+        await ctx.send("No music is currently playing.")
+
+
+
+@bot.command()
+async def skip(ctx):
+    global is_playing
+    if ctx.voice_client.is_playing():
+        ctx.voice_client.stop()
+        is_playing = False
+        await ctx.send("Skipping the current song...")
+    else:
+        await ctx.send("No music is currently playing.")
+
+
+
+@bot.command()
 async def info(ctx):
     info_message = (
         "**Music Bot Commands**\n"
-        "`!play <name or URL>`: Play a single song from YouTube. If a name is provided, it will search for the song. If a URL is provided, it will play the song directly.\n"
+        "`!play <name or URL>`: Play a single song from YouTube or add it to the queue.\n"
         "`!playlist <playlist URL>`: Play all songs in a YouTube playlist.\n"
         "`!stop`: Stop the current song and disconnect from the voice channel.\n"
-        "`!info`: Show information about how to use the bot.\n"
+        "`!pause`: Pause the current song.\n"
+        "`!resume`: Resume the paused song.\n"
+        "`!skip`: Skip the current song.\n"
+        "`!volume <1-100>`: Set the volume of the bot.\n"
+        "`!nowplaying`: Show the currently playing song.\n"
+        "`!queue`: Show the current queue.\n"
+        "`!clear`: Clear the queue.\n"
     )
 
     await ctx.send(info_message)
