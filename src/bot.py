@@ -202,6 +202,22 @@ async def resume(ctx):
 
 
 @bot.command()
+async def volume(ctx, vol: int):
+    if ctx.voice_client is None:
+        await ctx.send("I'm not connected to a voice channel.")
+        return
+
+    if vol < 0 or vol > 100:
+        await ctx.send("Please provide a volume between 0 and 100.")
+        return
+
+    ctx.voice_client.source = discord.PCMVolumeTransformer(ctx.voice_client.source)
+    ctx.voice_client.source.volume = vol / 100
+    await ctx.send(f"Volume set to {vol}%")
+
+
+
+@bot.command()
 async def skip(ctx):
     global is_playing
     if ctx.voice_client.is_playing():
