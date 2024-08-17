@@ -220,7 +220,7 @@ async def volume(ctx, vol: int):
 @bot.command()
 async def nowplaying(ctx):
     global current_song
-    
+
     if current_song:
         ytdl = youtube_dl.YoutubeDL(ytdl_opts)
         info = ytdl.extract_info(current_song, download=False)
@@ -246,10 +246,16 @@ async def skip(ctx):
 async def info(ctx):
     info_message = (
         "**Music Bot Commands**\n"
-        "`!play <name or URL>`: Play a single song from YouTube. If a name is provided, it will search for the song. If a URL is provided, it will play the song directly.\n"
+        "`!play <name or URL>`: Play a single song from YouTube or add it to the queue.\n"
         "`!playlist <playlist URL>`: Play all songs in a YouTube playlist.\n"
         "`!stop`: Stop the current song and disconnect from the voice channel.\n"
-        "`!info`: Show information about how to use the bot.\n"
+        "`!pause`: Pause the current song.\n"
+        "`!resume`: Resume the paused song.\n"
+        "`!skip`: Skip the current song.\n"
+        "`!volume <1-100>`: Set the volume of the bot.\n"
+        "`!nowplaying`: Show the currently playing song.\n"
+        "`!queue`: Show the current queue.\n"
+        "`!clear`: Clear the queue.\n"
     )
 
     await ctx.send(info_message)
