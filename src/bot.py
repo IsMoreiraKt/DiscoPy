@@ -218,6 +218,19 @@ async def volume(ctx, vol: int):
 
 
 @bot.command()
+async def nowplaying(ctx):
+    global current_song
+    
+    if current_song:
+        ytdl = youtube_dl.YoutubeDL(ytdl_opts)
+        info = ytdl.extract_info(current_song, download=False)
+        await ctx.send(f"Now playing: {info['title']}")
+    else:
+        await ctx.send("No music is currently playing.")
+
+
+
+@bot.command()
 async def skip(ctx):
     global is_playing
     if ctx.voice_client.is_playing():
