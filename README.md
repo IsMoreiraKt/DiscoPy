@@ -34,10 +34,14 @@ cd DiscoPy
 
 2. **Create a .env file:**
 ```env
-DISCORD_TOKEN=your_discord_bot_token
+DISCORD_TOKEN=[the-token-of-the-discord]
+VOICE_CHANNEL_ID=[voice-channel-id]
+TEXT_CHANNEL_ID=[text-channel-id]
 ```
 
 You can get a token [here](https://discord.com/developers/docs/intro).
+
+You can get channel_id by right-clicking on the desired chat.
 
 3. **Build the Docker Image:**
 ```bash
