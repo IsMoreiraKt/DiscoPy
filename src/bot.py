@@ -21,6 +21,9 @@ intents.presences = True
 
 
 bot = commands.Bot(command_prefix='!', intents=intents)
+queue = []
+is_playing = False
+current_song = None
 
 
 
@@ -71,8 +74,22 @@ async def on_ready():
 
 
 
+async def play_next(ctx, voice_client):
+    global is_playing, current_song
+    if len(queue) > 0:
+        is_playing = True
+        current_song = queue.pop(0)
+        await play_url(ctx, voice_client, current_song)
+    else:
+        is_playing = False
+        current_song = None
+
+
+
 @bot.command()
 async def play(ctx, *, query: str):
+    global queue, is_playing
+
     if ctx.author.voice is None:
         await ctx.send("You need to be in a voice channel to use this command.")
         return
@@ -85,13 +102,18 @@ async def play(ctx, *, query: str):
 
     if 'http' in query:
         url = query
-        await play_url(ctx, voice_client, url)
     else:
         url = search_youtube(query)
-        await play_url(ctx, voice_client, url)
+
+    queue.append(url)
+    await ctx.send(f"Added to queue: {url}")
+
+    if not is_playing:
+        await play_next(ctx, voice_client)
 
 
 async def play_url(ctx, voice_client, url):
+    global current_song
     ytdl = youtube_dl.YoutubeDL(ytdl_opts)
     info = ytdl.extract_info(url, download=False)
     url2 = info['formats'][0]['url']
@@ -102,7 +124,7 @@ async def play_url(ctx, voice_client, url):
     }
 
     voice_client.stop()
-    voice_client.play(discord.FFmpegPCMAudio(url2, **ffmpeg_opts))
+    voice_client.play(discord.FFmpegPCMAudio(url2, **ffmpeg_opts), after=lambda e: asyncio.run_coroutine_threadsafe(play_next(ctx, voice_client), bot.loop))
 
     await ctx.send(f"Now playing: {info['title']}")
 
