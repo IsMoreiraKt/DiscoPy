@@ -182,6 +182,38 @@ async def stop(ctx):
 
 
 @bot.command()
+async def pause(ctx):
+    if ctx.voice_client.is_playing():
+        ctx.voice_client.pause()
+        await ctx.send("Music paused.")
+    else:
+        await ctx.send("No music is currently playing.")
+
+
+
+@bot.command()
+async def resume(ctx):
+    if ctx.voice_client.is_paused():
+        ctx.voice_client.resume()
+        await ctx.send("Music resumed.")
+    else:
+        await ctx.send("Music is not paused.")
+
+
+
+@bot.command()
+async def skip(ctx):
+    global is_playing
+    if ctx.voice_client.is_playing():
+        ctx.voice_client.stop()
+        is_playing = False
+        await ctx.send("Skipping the current song...")
+    else:
+        await ctx.send("No music is currently playing.")
+
+
+
+@bot.command()
 async def info(ctx):
     info_message = (
         "**Music Bot Commands**\n"
