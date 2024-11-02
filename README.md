@@ -71,15 +71,15 @@ docker-compose up
         - Speaking on Voice Channels
 
 ## Commands
-- **!play (nome ou URL):** Toca uma música. Pode ser um nome ou uma URL do YouTube.
-- **!playlist (URL):** Toca todas as músicas de uma playlist do YouTube.
-- **!stop:** Para a música atual e desconecta o bot do canal de voz.
-- **!info:** Exibe uma lista de comandos disponíveis e como usá-los.
-- **!volume (número):** Ajusta o volume da música em reprodução. O valor deve estar entre 0 e 100.
-- **!pause:** Pausa a música atual.
-- **!resume:** Retoma a reprodução da música pausada.
-- **!skip:** Pula a música atual e passa para a próxima na lista de reprodução.
-- **!current:** Mostra o nome da música que está tocando atualmente.
+- **!play (nome ou URL):** Play a song. It can be a name or a YouTube URL.
+- **!playlist (URL):** Plays all the songs in a YouTube playlist.
+- **!stop:** Stops the current song and disconnects the bot from the voice channel.
+- **!info:** Displays a list of available commands and how to use them.
+- **!volume (number):** Adjusts the volume of the song being played. The value must be between 0 and 100.
+- **!pause:** Pause the current song.
+- **!resume:** Resumes playback of the paused song.
+- **!skip:** Skip the current song and move on to the next one in the playlist.
+- **!current:** Shows the name of the song currently playing.
 
 ## License
 This project is licensed under the GNU General Public License v3.0 (GPL-3.0). See the [LICENSE](./LICENSE) file for details.
